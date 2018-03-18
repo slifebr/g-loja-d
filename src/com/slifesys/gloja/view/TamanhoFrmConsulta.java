@@ -12,10 +12,9 @@ import java.util.List;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 
-import com.slifesys.gloja.model.Categoria;
-import com.slifesys.gloja.repository.CategoriaDao;
-import com.slifesys.gloja.repository.jpa.CategoriaJPADao;
-import com.slifesys.gloja.template.Formulario;
+import com.slifesys.gloja.model.Tamanho;
+import com.slifesys.gloja.repository.TamanhoDao;
+import com.slifesys.gloja.template.FormularioConsulta;
 import com.solutionssoft.desktop.Mensagem;
 import com.solutionssoft.desktop.PosicaoRotulo;
 import com.solutionssoft.desktop.SSBotao;
@@ -23,33 +22,68 @@ import com.solutionssoft.desktop.SSCampoTexto;
 import com.solutionssoft.desktop.SSGrade;
 import com.solutionssoft.infraestrutura.util.Validacao;
 
-public class CategoriaFrmConsulta extends Formulario {
-
-	// rodape
-	private SSBotao cmdIncluir = new SSBotao();
-	private SSBotao cmdAlterar = new SSBotao();
-	private SSBotao cmdExcluir = new SSBotao();
-	private SSBotao cmdFechar = new SSBotao();
+public class TamanhoFrmConsulta extends FormularioConsulta {
+	
 	// conteudo - topo - filtro
 	private SSCampoTexto txtFiltroNome = new SSCampoTexto();
 	private SSBotao cmdBuscar = new SSBotao();
+	
 	private SSGrade grid = new SSGrade();
 	private JScrollPane scroll = new JScrollPane();
-	// DAOs
-	private CategoriaDao dao = new CategoriaJPADao();
 
-	public CategoriaFrmConsulta() {
+	// DAOs
+	private TamanhoDao dao = new TamanhoJPADao();
+
+	public TamanhoFrmConsulta() {
 		init();
 	}
 
-	private void init() {
-		super.setTitulo("Categoria");
-		super.setDescricao("Consulta de Categoria");
-		super.botoesNaEsquerda();
+
+	protected void init() {
+		super.setTitulo("Tamanhos/Medidas");
+		super.setDescricao("Consulta de Tamanhos/Medidas");
+		
+		cmdBuscar.setText("Buscar");
+		cmdBuscar.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				buscar();
+			}
+		});
+		
+		// Adiciona os botões no formulario
+		cmdIncluir.setText("Novo");
+		cmdAlterar.setText("Alterar");
+		cmdExcluir.setText("Excluir");
+		cmdFechar.setText("Fechar");
+
+		cmdFechar.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				sair();
+			}
+		});
+		cmdIncluir.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				incluir();
+			}
+		});
+		cmdAlterar.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				alterar();
+			}
+		});
+
+		cmdExcluir.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				excluir();
+			}
+		});
+
 		super.addBotaoRodape(cmdIncluir);
 		super.addBotaoRodape(cmdAlterar);
 		super.addBotaoRodape(cmdExcluir);
 		super.addBotaoRodape(cmdFechar);
+
+		
 		// implementando o conteudo do formulario
 		JPanel conteudo = super.getConteudoTabela();
 
@@ -77,72 +111,54 @@ public class CategoriaFrmConsulta extends Formulario {
 
 		// campos da tabela
 		grid.getModeloTabela().addColumn("Código");
+		grid.getModeloTabela().addColumn("Sigla");
 		grid.getModeloTabela().addColumn("Descrição");
 
 		grid.getModeloColuna().getColumn(0).setPreferredWidth(70);
-		grid.getModeloColuna().getColumn(1).setPreferredWidth(280);
+		grid.getModeloColuna().getColumn(1).setPreferredWidth(70);
+		grid.getModeloColuna().getColumn(2).setPreferredWidth(280);
 
 		grid.getModeloColuna().setCampo(0, "id");
-		grid.getModeloColuna().setCampo(1, "descr");
+		grid.getModeloColuna().setCampo(1, "sigla");
+		grid.getModeloColuna().setCampo(2, "descr");
 		txtFiltroNome.setRotulo("Descrição");
 		txtFiltroNome.setRotuloPosicao(PosicaoRotulo.ESQUERDA);
 
-		cmdIncluir.setText("Novo");
-		cmdAlterar.setText("Alterar");
-		cmdExcluir.setText("Excluir");
-		cmdFechar.setText("Fechar");
-		cmdBuscar.setText("Buscar");
 
-		cmdBuscar.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				buscar();
-			}
-		});
-
-		cmdFechar.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				sair();
-			}
-		});
-		cmdIncluir.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				incluir();
-			}
-		});
-		cmdAlterar.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				alterar();
-			}
-		});
-
-		cmdExcluir.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				excluir();
-			}
-		});
 	}
-
-	private void sair() {
+	
+	
+	@Override
+	protected void sair() {
 		super.remove(); // remove o frame do container
-		// super.fechar(); //SE QUISER PERGUTAR ANTES
+		
 	}
 
-	private void incluir() {
+	@Override
+	protected void incluir() {
 		showCadastro(null);
+		
 	}
 
-	private void alterar() {
-		Categoria entidade = (Categoria) grid.getLinhaSelecionada();
+	@Override
+	protected void alterar() {
+		Tamanho entidade = (Tamanho) grid.getLinhaSelecionada();
 		showCadastro(entidade);
 	}
 
-	private void showCadastro(Categoria categoria) {
-		Formulario frm = new CategoriaFrm(categoria);
-		this.show(frm);
+	@Override
+	protected void showForm() {
+
+	}
+	private void showForm(Tamanho tamanho) {
+		//Formulario frm = new Tamanhofrm(tamanho);
+		//this.show(frm);
+		;
 	}
 
-	private void buscar() {
-		List<Categoria> lista = new ArrayList<Categoria>();
+	@Override
+	protected void buscar() {
+		List<Tamanho> lista = new ArrayList<Tamanho>();
 		try {
 			String nome = txtFiltroNome.getText();
 			if (Validacao.vazio(nome)) {
@@ -156,15 +172,15 @@ public class CategoriaFrmConsulta extends Formulario {
 		} catch (Exception e) {
 			Mensagem.erro(e.getMessage());
 		}
-
+		
 	}
 
-	private void excluir() {
-		
-		Categoria entidade = (Categoria) grid.getLinhaSelecionada();
+	@Override
+	protected void excluir() {
+		Tamanho entidade = (Tamanho) grid.getLinhaSelecionada();
 		try {
 			if (entidade != null) {
-				if (Mensagem.confirma("Deseja excluir a categoria(" + entidade.getDescr()+")?")) {				
+				if (Mensagem.confirma("Deseja excluir a Tamanho/Medida(" + entidade.getDescr()+")?")) {				
 					dao.excluir(entidade);
 					Mensagem.avisa(null, "Registro excluido com sucesso!");
 					buscar();
@@ -177,4 +193,10 @@ public class CategoriaFrmConsulta extends Formulario {
 			Mensagem.erro(e.getMessage());
 		}
 	}
+		
+	private void showCadastro(Tamanho tamanho) {
+		//Formulario frm = new TamanhoFrm(tamanho);
+		//this.show(frm);
+	}
+
 }

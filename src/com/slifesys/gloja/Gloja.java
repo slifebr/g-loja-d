@@ -15,6 +15,7 @@ import javax.swing.UnsupportedLookAndFeelException;
 
 import com.slifesys.gloja.template.Formulario;
 import com.slifesys.gloja.view.CategoriaFrmConsulta;
+import com.slifesys.gloja.view.TamanhoFrmConsulta;
 
 public class Gloja extends JFrame {
 
@@ -43,23 +44,34 @@ public class Gloja extends JFrame {
 		JMenu mnCadastros = new JMenu("Cadastros");
 		menuBar.add(mnCadastros);
 
+		// ------------Cadastro: Categoria ---------------------------------
 		JMenuItem mntmCategoria = new JMenuItem("Categoria");
 		mntmCategoria.addActionListener(new ActionListener() {
-			
+
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				showWindow(new CategoriaFrmConsulta() );
-				
+				showWindow(new CategoriaFrmConsulta());
+
 			}
 		});
 		mnCadastros.add(mntmCategoria);
 
+		// ------------Cadastro: Marca--------------------------------------
 		JMenuItem mntmMarca = new JMenuItem("Marca");
 		mnCadastros.add(mntmMarca);
 
+		// ------------Cadastro: Tamanho -----------------------------------
 		JMenuItem mntmTamanho = new JMenuItem("Tamanho");
+		mntmTamanho.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				showWindow(new TamanhoFrmConsulta());
+			}
+		});
 		mnCadastros.add(mntmTamanho);
 
+		// ------------Cadastro: Classificação ------------------------------
 		JMenuItem mntmClassificacao = new JMenuItem("Classificação");
 		mnCadastros.add(mntmClassificacao);
 
@@ -78,14 +90,14 @@ public class Gloja extends JFrame {
 		return desktop;
 	}
 
-	private void showWindow( Formulario formulario) {
+	private void showWindow(Formulario formulario) {
 		formulario.setApp(this);
 		formulario.show();
 	}
-	
+
 	// ----------------------------------------------------------------------------------------------
 	// ----------------------------------------------------------------------------------------------
-	//                                       Método MAIN
+	// Método MAIN
 	// ----------------------------------------------------------------------------------------------
 	// ----------------------------------------------------------------------------------------------
 
@@ -102,13 +114,11 @@ public class Gloja extends JFrame {
 			e1.printStackTrace();
 		}
 
-
-		 /*
-		 Gloja gloja = new Gloja(); gloja.setVisible(true);
-		 
-		 //gloja.setExtendedState(JFrame.MAXIMIZED_BOTH);
-	     */
-		  
+		/*
+		 * Gloja gloja = new Gloja(); gloja.setVisible(true);
+		 * 
+		 * //gloja.setExtendedState(JFrame.MAXIMIZED_BOTH);
+		 */
 
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {

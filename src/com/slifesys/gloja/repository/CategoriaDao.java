@@ -7,6 +7,6 @@ import com.slifesys.gloja.repository.api.Dao;
 
 public interface CategoriaDao  extends Dao<Categoria> {
 	
-	List<Categoria> listar (String descr) throws Exception;
+	List<Categoria> findAllByDescr (String descr) throws Exception;
 
 }
