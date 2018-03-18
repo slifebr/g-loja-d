@@ -4,7 +4,6 @@ import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.GridBagLayout;
-import java.awt.Toolkit;
 import java.beans.PropertyVetoException;
 
 import javax.swing.JDesktopPane;
@@ -22,8 +21,8 @@ import com.solutionssoft.desktop.SSRodape;
 public class Formulario extends JPanel {
 
 	private SSCabecalho cabecalho = new SSCabecalho();
-	//private SSConteudo conteudo = new SSConteudo();
-	private JPanel conteudo = new JPanel();
+	private SSConteudo conteudo = new SSConteudo();
+	//private JPanel conteudo = new JPanel();
 	private SSRodape rodape = new SSRodape();
 
 	private Gloja app;
@@ -70,6 +69,7 @@ public class Formulario extends JPanel {
 	}
 
 	private void init() {
+
 		this.setLayout(new BorderLayout());
 
 		this.setTitulo("Informe um titulo");
@@ -82,10 +82,11 @@ public class Formulario extends JPanel {
 
 	}
 
+
+
 	public void show() {
 		this.show(this);
 	}
-
 	public void show(Formulario frm) {
 		if (frm != this) {
 			frm.setApp(this.getApp());
@@ -104,7 +105,7 @@ public class Formulario extends JPanel {
 		getDesktop().moveToFront(internal);
 	}
 
-	public void remover() {
+	public void remove() {
 		JInternalFrame iframe = (JInternalFrame) SwingUtilities.getAncestorOfClass(JInternalFrame.class, this);
 		getDesktop().remove(iframe);
 		getDesktop().repaint();
@@ -113,7 +114,7 @@ public class Formulario extends JPanel {
 	public void fechar() {
 		boolean resposta = Mensagem.pergunta("Deseja cancelar esta operação");
 		if (resposta) {
-			remover();
+			remove();
 		}
 	}
 

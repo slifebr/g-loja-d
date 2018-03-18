@@ -28,8 +28,8 @@ public class CategoriaFrm extends Formulario {
 	private SSCampoTexto txtId = new SSCampoTexto();
 	private SSCampoTexto txtDescr = new SSCampoTexto();
 
-	private SSBotao btnSalvar = new SSBotao();
-	private SSBotao btnSair = new SSBotao();
+	private SSBotao cmdSalvar = new SSBotao();
+	private SSBotao cmdSair = new SSBotao();
 
 	private CategoriaDao dao = new CategoriaJPADao();
 	private Categoria entidade;
@@ -45,21 +45,22 @@ public class CategoriaFrm extends Formulario {
 
 	private void init() {
 
-		btnSair.setText("Sair");
-		btnSalvar.setText("Salvar");
+		cmdSair.setText("Sair");
+		cmdSalvar.setText("Salvar");
 
 		// Listners = Comandos = Eventos
-		btnSalvar.addActionListener(new ActionListener() {
+        
+		cmdSalvar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				salvar();
 			}
 		});
-		btnSair.addActionListener(new ActionListener() {
+		cmdSair.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				sair();
 			}
 		});
-
+   
 		txtId.addFocusListener(new FocusListener() {
 			public void focusGained(FocusEvent e) {
 			};
@@ -73,8 +74,8 @@ public class CategoriaFrm extends Formulario {
 		super.setTitulo("Categoria");
 		super.setDescricao("Cadastro de Categorias");
 
-		super.addBotaoRodape(btnSalvar);
-		super.addBotaoRodape(btnSair);
+		super.addBotaoRodape(cmdSalvar);
+		super.addBotaoRodape(cmdSair);
 		// IMPORTANTE
 		JPanel panelConteudo = super.getConteudoGrid();
 		panelConteudo.setLayout(new GridBagLayout());
@@ -106,7 +107,8 @@ public class CategoriaFrm extends Formulario {
 		txtDescr.setRotulo("Descrição");
 		txtDescr.setColunas(40);
 	}
-
+    
+	
 	private void preencher() {
 		try {
 			if (!Validacao.nuloOuVazio(txtId.getText())) {
@@ -125,6 +127,7 @@ public class CategoriaFrm extends Formulario {
 			JOptionPane.showMessageDialog(null, e.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
 		}
 	}
+
 
 	private void salvar() {
 		try {
